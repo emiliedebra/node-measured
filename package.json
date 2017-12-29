@@ -21,6 +21,7 @@
     "inherits": "^2.0"
   },
   "devDependencies": {
+    "@awt-node/esm": "^1.5.0",
     "jslint": "^0.8",
     "mocha": "^2.1",
     "mochify": "^2.1",

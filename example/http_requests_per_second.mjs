@@ -10,7 +10,7 @@ const http = require('http');
 const rps = collection.meter('requestsPerSecond');
 http.createServer((req, res) => {
   console.error(req.headers['content-length']);
-  rps.mark();
+  rps.mark(1);
   res.end('Thanks');
 }).listen(8000);
 

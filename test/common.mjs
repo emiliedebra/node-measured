@@ -1,5 +1,3 @@
-'use strict';
-
 /*
 var common = exports;
 var path   = require('path');
@@ -10,4 +8,4 @@ common.dir.lib  = path.join(common.dir.root, 'lib');
 
 common.measured = require(common.dir.root);
 */
-exports.measured = require('../index');
+export { measured } from '../index';
