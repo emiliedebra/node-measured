@@ -1,55 +1,54 @@
-/*global describe, it, beforeEach, afterEach*/
-'use strict';
+/* global describe, it, beforeEach, afterEach */
+import { describe, it, beforeEach } from 'mocha';
+import Meter from '../../../lib/metrics/Meter';
+// import * as units from '../../../lib/util/units';
+// let common = require('../../common');
+const assert = require('assert');
+const sinon = require('sinon');
+// let units  = common.measured.units;
 
-var common = require('../../common');
-var assert = require('assert');
-var sinon  = require('sinon');
-var units  = common.measured.units;
-
-describe('Meter', function () {
-  var meter;
-  var clock;
-  beforeEach(function () {
+describe('Meter', () => {
+  let meter;
+  let clock;
+  beforeEach(() => {
     clock = sinon.useFakeTimers();
-    meter = new common.measured.Meter({getTime: function () {
-      return new Date().getTime();
-    }});
+    meter = new Meter({ getTime: () => new Date().getTime() });
   });
 
-  afterEach(function () {
+  afterEach(() => {
     clock.restore();
   });
 
-  it('all values are correctly initialized', function () {
+  it('all values are correctly initialized', () => {
     assert.deepEqual(meter.toJSON(), {
-      'mean'         : 0,
-      'count'        : 0,
-      'currentRate'  : 0,
-      '1MinuteRate'  : 0,
-      '5MinuteRate'  : 0,
-      '15MinuteRate' : 0
+      mean: 0,
+      count: 0,
+      currentRate: 0,
+      oneMinuteRate: 0,
+      fiveMinuteRate: 0,
+      fifteenMinuteRate: 0,
     });
   });
 
-  it('supports rates override from opts', function () {
-    var rate = sinon.stub().returns(666);
-    var properties = {
-      m1Rate: {rate: rate},
-      m5Rate: {rate: rate},
-      m15Rate: {rate: rate}
+  it('supports rates override from opts', () => {
+    const rate = sinon.stub().returns(666);
+    const properties = {
+      m1Rate: { rate },
+      m5Rate: { rate },
+      m15Rate: { rate },
     };
-    var json = new common.measured.Meter(properties).toJSON();
+    const json = new Meter(properties).toJSON();
 
     assert.equal(json['1MinuteRate'].toFixed(0), '666');
     assert.equal(json['5MinuteRate'].toFixed(0), '666');
     assert.equal(json['15MinuteRate'].toFixed(0), '666');
   });
 
-  it('decay over two marks and ticks', function () {
+  it('decay over two marks and ticks', () => {
     meter.mark(5);
     meter._tick();
 
-    var json = meter.toJSON();
+    let json = meter.toJSON();
     assert.equal(json.count, 5);
     assert.equal(json['1MinuteRate'].toFixed(4), '0.0800');
     assert.equal(json['5MinuteRate'].toFixed(4), '0.0165');
@@ -65,11 +64,11 @@ describe('Meter', function () {
     assert.equal(json['15MinuteRate'].toFixed(3), '0.017');
   });
 
-  it('mean rate', function () {
+  it('mean rate', () => {
     meter.mark(5);
     clock.tick(5000);
 
-    var json = meter.toJSON();
+    let json = meter.toJSON();
     assert.equal(json.mean, 1);
 
     clock.tick(5000);
@@ -79,7 +78,7 @@ describe('Meter', function () {
   });
 
   it('currentRate is the observed rate since the last toJSON call',
-    function () {
+    () => {
       meter.mark(1);
       meter.mark(2);
       meter.mark(3);
@@ -89,7 +88,7 @@ describe('Meter', function () {
       assert.equal(meter.toJSON().currentRate, 2);
     });
 
-  it('currentRate resets by reading it', function () {
+  it('currentRate resets by reading it', () => {
     meter.mark(1);
     meter.mark(2);
     meter.mark(3);
@@ -99,7 +98,7 @@ describe('Meter', function () {
   });
 
   it('currentRate also resets internal duration timer by reading it',
-    function () {
+    () => {
       meter.mark(1);
       meter.mark(2);
       meter.mark(3);
@@ -114,26 +113,22 @@ describe('Meter', function () {
       assert.strictEqual(meter.toJSON().currentRate, 1);
     });
 
-  it('#reset resets all values', function () {
+  it('#reset resets all values', () => {
     meter.mark(1);
-    var json = meter.toJSON();
+    let json = meter.toJSON();
 
-    var key, value;
-    for (key in json) {
-      if (json.hasOwnProperty(key)) {
-        value = json[key];
-        assert.ok(typeof value === 'number');
-      }
+    let value;
+    for (const key of Object.keys(json)) {
+      value = json[key];
+      assert.ok(typeof value === 'number');
     }
 
     meter.reset();
     json = meter.toJSON();
 
-    for (key in json) {
-      if (json.hasOwnProperty(key)) {
-        value = json[key];
-        assert.ok(value === 0 || value === null);
-      }
+    for (const key of Object.keys(json)) {
+      value = json[key];
+      assert.ok(value === 0 || value === null);
     }
   });
 });

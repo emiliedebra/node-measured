@@ -1,20 +1,22 @@
-/*global describe, it, beforeEach, afterEach*/
-'use strict';
+/* global describe, it, beforeEach, afterEach */
+import { describe, it, beforeEach } from 'mocha';
+import Histogram from '../../../lib/metrics/Histogram';
+import EDS from '../../../lib/util/ExponentiallyDecayingSample';
+// import common from '../../common';
 
-var common    = require('../../common');
-var assert    = require('assert');
-var sinon     = require('sinon');
-var Histogram = common.measured.Histogram;
-var EDS       = common.measured.ExponentiallyDecayingSample;
+const assert = require('assert');
+const sinon = require('sinon');
+// const Histogram = common.measured.Histogram;
+// const EDS = common.measured.ExponentiallyDecayingSample;
 
-describe('Histogram', function () {
-  var histogram;
-  beforeEach(function () {
+describe('Histogram', () => {
+  let histogram;
+  beforeEach(() => {
     histogram = new Histogram();
   });
 
-  it('all values are null in the beginning', function () {
-    var json = histogram.toJSON();
+  it('all values are null in the beginning', () => {
+    const json = histogram.toJSON();
     assert.strictEqual(json.min, null);
     assert.strictEqual(json.max, null);
     assert.strictEqual(json.sum, 0);
@@ -30,22 +32,22 @@ describe('Histogram', function () {
   });
 });
 
-describe('Histogram#update', function () {
-  var sample;
-  var histogram;
-  beforeEach(function () {
-    sample    = sinon.stub(new EDS());
-    histogram = new Histogram({sample: sample});
+describe('Histogram#update', () => {
+  let sample;
+  let histogram;
+  beforeEach(() => {
+    sample = sinon.stub(new EDS());
+    histogram = new Histogram({ sample });
 
     sample.toArray.returns([]);
   });
 
-  it('updates underlaying sample', function () {
+  it('updates underlaying sample', () => {
     histogram.update(5);
     assert.ok(sample.update.calledWith(5));
   });
 
-  it('keeps track of min', function () {
+  it('keeps track of min', () => {
     histogram.update(5);
     histogram.update(3);
     histogram.update(6);
@@ -53,7 +55,7 @@ describe('Histogram#update', function () {
     assert.equal(histogram.toJSON().min, 3);
   });
 
-  it('keeps track of max', function () {
+  it('keeps track of max', () => {
     histogram.update(5);
     histogram.update(9);
     histogram.update(3);
@@ -61,7 +63,7 @@ describe('Histogram#update', function () {
     assert.equal(histogram.toJSON().max, 9);
   });
 
-  it('keeps track of sum', function () {
+  it('keeps track of sum', () => {
     histogram.update(5);
     histogram.update(1);
     histogram.update(12);
@@ -69,7 +71,7 @@ describe('Histogram#update', function () {
     assert.equal(histogram.toJSON().sum, 18);
   });
 
-  it('keeps track of count', function () {
+  it('keeps track of count', () => {
     histogram.update(5);
     histogram.update(1);
     histogram.update(12);
@@ -77,7 +79,7 @@ describe('Histogram#update', function () {
     assert.equal(histogram.toJSON().count, 3);
   });
 
-  it('keeps track of mean', function () {
+  it('keeps track of mean', () => {
     histogram.update(5);
     histogram.update(1);
     histogram.update(12);
@@ -85,7 +87,7 @@ describe('Histogram#update', function () {
     assert.equal(histogram.toJSON().mean, 6);
   });
 
-  it('keeps track of variance (example without variance)', function () {
+  it('keeps track of variance (example without variance)', () => {
     histogram.update(5);
     histogram.update(5);
     histogram.update(5);
@@ -93,7 +95,7 @@ describe('Histogram#update', function () {
     assert.equal(histogram.toJSON().variance, 0);
   });
 
-  it('keeps track of variance (example with variance)', function () {
+  it('keeps track of variance (example with variance)', () => {
     histogram.update(1);
     histogram.update(2);
     histogram.update(3);
@@ -102,7 +104,7 @@ describe('Histogram#update', function () {
     assert.equal(histogram.toJSON().variance.toFixed(3), '1.667');
   });
 
-  it('keeps track of stddev', function () {
+  it('keeps track of stddev', () => {
     histogram.update(1);
     histogram.update(2);
     histogram.update(3);
@@ -111,15 +113,15 @@ describe('Histogram#update', function () {
     assert.equal(histogram.toJSON().stddev.toFixed(3), '1.291');
   });
 
-  it('keeps track of percentiles', function () {
-    var values = [];
-    var i;
+  it('keeps track of percentiles', () => {
+    const values = [];
+    let i;
     for (i = 1; i <= 100; i++) {
       values.push(i);
     }
     sample.toArray.returns(values);
 
-    var json = histogram.toJSON();
+    const json = histogram.toJSON();
     assert.equal(json.median.toFixed(3), '50.500');
     assert.equal(json.p75.toFixed(3), '75.750');
     assert.equal(json.p95.toFixed(3), '95.950');
@@ -128,21 +130,21 @@ describe('Histogram#update', function () {
   });
 });
 
-describe('Histogram#percentiles', function () {
-  var sample;
-  var histogram;
-  beforeEach(function () {
-    sample    = sinon.stub(new EDS());
-    histogram = new Histogram({sample: sample});
+describe('Histogram#percentiles', () => {
+  let sample;
+  let histogram;
+  beforeEach(() => {
+    sample = sinon.stub(new EDS());
+    histogram = new Histogram({ sample });
 
-    var values = [];
-    var i;
+    const values = [];
+    let i;
     for (i = 1; i <= 100; i++) {
       values.push(i);
     }
 
-    var swapWith;
-    var value;
+    let swapWith;
+    let value;
     for (i = 0; i < 100; i++) {
       swapWith = Math.floor(Math.random() * 100);
       value = values[i];
@@ -154,8 +156,8 @@ describe('Histogram#percentiles', function () {
     sample.toArray.returns(values);
   });
 
-  it('calculates single percentile correctly', function () {
-    var percentiles = histogram.percentiles([0.5]);
+  it('calculates single percentile correctly', () => {
+    let percentiles = histogram.percentiles([0.5]);
     assert.equal(percentiles[0.5], 50.5);
 
     percentiles = histogram.percentiles([0.99]);
@@ -163,50 +165,44 @@ describe('Histogram#percentiles', function () {
   });
 });
 
-describe('Histogram#reset', function () {
-  var sample;
-  var histogram;
-  beforeEach(function () {
-    sample    = new EDS();
-    histogram = new Histogram({sample: sample});
+describe('Histogram#reset', () => {
+  let sample;
+  let histogram;
+  beforeEach(() => {
+    sample = new EDS();
+    histogram = new Histogram({ sample });
   });
 
-  it('resets all values', function () {
+  it('resets all values', () => {
     histogram.update(5);
     histogram.update(2);
-    var json = histogram.toJSON();
+    let json = histogram.toJSON();
 
-    var key;
-    for (key in json) {
-      if (json.hasOwnProperty(key)) {
-        assert.ok(typeof json[key] === 'number');
-      }
+    for (const key of Object.keys(json)) {
+      assert.ok(typeof json[key] === 'number');
     }
 
     histogram.reset();
     json = histogram.toJSON();
 
-    for (key in json) {
-      if (json.hasOwnProperty(key)) {
-        assert.ok(json[key] === 0 || json[key] === null);
-      }
+    for (const key of Object.keys(json)) {
+      assert.ok(json[key] === 0 || json[key] === null);
     }
   });
 });
 
-describe('Histogram#hasValues', function () {
-
-  var histogram;
-  beforeEach(function () {
+describe('Histogram#hasValues', () => {
+  let histogram;
+  beforeEach(() => {
     histogram = new Histogram();
   });
 
-  it('has values', function () {
+  it('has values', () => {
     histogram.update(5);
     assert.ok(histogram.hasValues());
   });
 
-  it('has no values', function () {
+  it('has no values', () => {
     assert.equal(histogram.hasValues(), false);
   });
 });
