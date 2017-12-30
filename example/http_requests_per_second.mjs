@@ -1,7 +1,5 @@
 /* @flow */
-
-// 'use strict';
-const metrics = require('..');
+// import * as metrics from '../lib/metrics/index';
 
 const collection = new metrics.Collection('http');
 
