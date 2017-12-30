@@ -1,7 +1,7 @@
 /* global describe, it, beforeEach, afterEach */
 import { describe, it, beforeEach } from 'mocha';
-import Histogram from '../../../lib/metrics/Histogram';
-import EDS from '../../../lib/util/ExponentiallyDecayingSample';
+import { Histogram } from '../../../lib/metrics/Histogram';
+import { ExponentiallyDecayingSample } from '../../../lib/util/ExponentiallyDecayingSample';
 // import common from '../../common';
 
 const assert = require('assert');
@@ -36,7 +36,7 @@ describe('Histogram#update', () => {
   let sample;
   let histogram;
   beforeEach(() => {
-    sample = sinon.stub(new EDS());
+    sample = sinon.stub(new ExponentiallyDecayingSample());
     histogram = new Histogram({ sample });
 
     sample.toArray.returns([]);
@@ -134,7 +134,7 @@ describe('Histogram#percentiles', () => {
   let sample;
   let histogram;
   beforeEach(() => {
-    sample = sinon.stub(new EDS());
+    sample = sinon.stub(new ExponentiallyDecayingSample());
     histogram = new Histogram({ sample });
 
     const values = [];
@@ -169,7 +169,7 @@ describe('Histogram#reset', () => {
   let sample;
   let histogram;
   beforeEach(() => {
-    sample = new EDS();
+    sample = new ExponentiallyDecayingSample();
     histogram = new Histogram({ sample });
   });
 
@@ -177,7 +177,6 @@ describe('Histogram#reset', () => {
     histogram.update(5);
     histogram.update(2);
     let json = histogram.toJSON();
-
     for (const key of Object.keys(json)) {
       assert.ok(typeof json[key] === 'number');
     }
@@ -186,6 +185,7 @@ describe('Histogram#reset', () => {
     json = histogram.toJSON();
 
     for (const key of Object.keys(json)) {
+      // console.log(json[key]);
       assert.ok(json[key] === 0 || json[key] === null);
     }
   });

@@ -2,9 +2,9 @@
 /* @flow */
 
 import { describe, it, beforeEach, afterEach } from 'mocha';
-import Timer from '../../../lib/metrics/Timer';
-import Meter from '../../../lib/metrics/Meter';
-import Histogram from '../../../lib/metrics/Histogram';
+import { Timer } from '../../../lib/metrics/Timer';
+import { Meter } from '../../../lib/metrics/Meter';
+import { Histogram } from '../../../lib/metrics/Histogram';
 
 // const common = require('../../common');
 const assert = require('assert');

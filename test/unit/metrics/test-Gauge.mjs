@@ -1,7 +1,7 @@
 /* global describe, it, beforeEach, afterEach */
 
 import { describe, it } from 'mocha';
-import Gauge from '../../../lib/metrics/Gauge';
+import { Gauge } from '../../../lib/metrics/Gauge';
 
 // var common = require('../../common');
 const assert = require('assert');

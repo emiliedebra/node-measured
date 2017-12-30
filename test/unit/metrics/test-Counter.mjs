@@ -1,6 +1,6 @@
 /* global describe, it, beforeEach, afterEach */
 import { describe, it, beforeEach } from 'mocha';
-import Counter from '../../../lib/metrics/Counter';
+import { Counter } from '../../../lib/metrics/Counter';
 
 // const common = require('../../common');
 const assert = require('assert');

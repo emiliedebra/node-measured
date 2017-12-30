@@ -1,6 +1,6 @@
 /* @flow */
 
-import Collection from './lib/Collection';
+import { Collection } from './lib/Collection';
 
 export { metrics } from './lib/metrics';
 export { util } from './lib/util';

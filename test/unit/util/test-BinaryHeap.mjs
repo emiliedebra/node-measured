@@ -2,7 +2,7 @@
 // const common = require('../../common');
 import assert from 'assert';
 import { describe, it, beforeEach } from 'mocha';
-import BinaryHeap from '../../../lib/util/BinaryHeap';
+import { BinaryHeap } from '../../../lib/util/BinaryHeap';
 
 describe('BinaryHeap#toArray', () => {
   it('is empty in the beginning', () => {

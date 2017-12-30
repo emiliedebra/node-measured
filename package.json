@@ -11,10 +11,12 @@
   "scripts": {
     "lint": "jslint --edition=latest --color './**/*.js'",
     "watch": "npm run test:node -- --watch",
+    "test:node-new": "./node_modules/.bin/_mocha -r @awt-node/esm './test/unit/**/test-*.mjs'",
     "test:node": "mocha './test/**/test-*.js'",
     "test:browser": "mochify './test/**/test-*.js'",
     "wd": "mochify --wd './test/**/test-*.js'",
     "pretest": "npm run lint",
+    "test-new": "npm run test:node-new",
     "test": "npm run test:node && npm run test:browser"
   },
   "dependencies": {

@@ -1,7 +1,7 @@
 /* global describe, it, beforeEach, afterEach */
 import assert from 'assert';
 import { describe, it, beforeEach } from 'mocha';
-import EDS from '../../../lib/util/ExponentiallyDecayingSample';
+import { ExponentiallyDecayingSample } from '../../../lib/util/ExponentiallyDecayingSample';
 import * as units from '../../../lib/util/units';
 // const common = require('../../common');
 // const EDS    = common.measured.ExponentiallyDecayingSample;
@@ -10,7 +10,7 @@ import * as units from '../../../lib/util/units';
 describe('ExponentiallyDecayingSample#toSortedArray', () => {
   let sample;
   beforeEach(() => {
-    sample = new EDS({
+    sample = new ExponentiallyDecayingSample({
       size: 3,
       random: () => 1,
     });
@@ -32,7 +32,7 @@ describe('ExponentiallyDecayingSample#toSortedArray', () => {
 describe('ExponentiallyDecayingSample#toArray', () => {
   let sample;
   beforeEach(() => {
-    sample = new EDS({
+    sample = new ExponentiallyDecayingSample({
       size: 3,
       random: () => 1,
     });
@@ -54,7 +54,7 @@ describe('ExponentiallyDecayingSample#toArray', () => {
 describe('ExponentiallyDecayingSample#update', () => {
   let sample;
   beforeEach(() => {
-    sample = new EDS({
+    sample = new ExponentiallyDecayingSample({
       size: 2,
       random: () => 1,
     });
@@ -93,21 +93,21 @@ describe('ExponentiallyDecayingSample#update', () => {
 describe('ExponentiallyDecayingSample#_rescale', () => {
   let sample;
   beforeEach(() => {
-    sample = new EDS({
+    sample = new ExponentiallyDecayingSample({
       size: 2,
       random: () => 1,
     });
   });
 
   it('works as expected', () => {
-    sample.update('a', (Date.now() + 50) * units.MINUTES);
-    sample.update('b', (Date.now() + 55) * units.MINUTES);
+    sample.update('a', Date.now() + (50 * units.MINUTES));
+    sample.update('b', Date.now() + (55 * units.MINUTES));
 
     let elements = sample._elements.toSortedArray();
     assert.ok(elements[0].priority > 1000);
     assert.ok(elements[1].priority > 1000);
 
-    sample._rescale((Date.now() + 60) * units.MINUTES);
+    sample._rescale(Date.now() + (60 * units.MINUTES));
 
     elements = sample._elements.toSortedArray();
     assert.ok(elements[0].priority < 1);

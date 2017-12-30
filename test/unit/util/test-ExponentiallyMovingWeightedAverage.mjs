@@ -1,7 +1,7 @@
 /* global describe, it, beforeEach, afterEach */
 import assert from 'assert';
 import { describe, it } from 'mocha';
-import EMWA from '../../../lib/util/ExponentiallyMovingWeightedAverage';
+import { ExponentiallyMovingWeightedAverage } from '../../../lib/util/ExponentiallyMovingWeightedAverage';
 import * as units from '../../../lib/util/units';
 
 // var common = require('../../common');
@@ -11,7 +11,7 @@ import * as units from '../../../lib/util/units';
 
 describe('ExponentiallyMovingWeightedAverage', () => {
   it('decay over several updates and ticks', () => {
-    const ewma = new EMWA(units.MINUTES, 5 * units.SECONDS);
+    const ewma = new ExponentiallyMovingWeightedAverage(units.MINUTES, 5 * units.SECONDS);
 
     ewma.update(5);
     ewma.tick();

@@ -1,6 +1,6 @@
 /* global describe, it, beforeEach, afterEach */
 import { describe, it, beforeEach } from 'mocha';
-import Meter from '../../../lib/metrics/Meter';
+import { Meter } from '../../../lib/metrics/Meter';
 // import * as units from '../../../lib/util/units';
 // let common = require('../../common');
 const assert = require('assert');
@@ -39,9 +39,9 @@ describe('Meter', () => {
     };
     const json = new Meter(properties).toJSON();
 
-    assert.equal(json['1MinuteRate'].toFixed(0), '666');
-    assert.equal(json['5MinuteRate'].toFixed(0), '666');
-    assert.equal(json['15MinuteRate'].toFixed(0), '666');
+    assert.equal(json['oneMinuteRate'].toFixed(0), '666');
+    assert.equal(json['fiveMinuteRate'].toFixed(0), '666');
+    assert.equal(json['fifteenMinuteRate'].toFixed(0), '666');
   });
 
   it('decay over two marks and ticks', () => {
@@ -50,18 +50,18 @@ describe('Meter', () => {
 
     let json = meter.toJSON();
     assert.equal(json.count, 5);
-    assert.equal(json['1MinuteRate'].toFixed(4), '0.0800');
-    assert.equal(json['5MinuteRate'].toFixed(4), '0.0165');
-    assert.equal(json['15MinuteRate'].toFixed(4), '0.0055');
+    assert.equal(json['oneMinuteRate'].toFixed(4), '0.0800');
+    assert.equal(json['fiveMinuteRate'].toFixed(4), '0.0165');
+    assert.equal(json['fifteenMinuteRate'].toFixed(4), '0.0055');
 
     meter.mark(10);
     meter._tick();
 
     json = meter.toJSON();
     assert.equal(json.count, 15);
-    assert.equal(json['1MinuteRate'].toFixed(3), '0.233');
-    assert.equal(json['5MinuteRate'].toFixed(3), '0.049');
-    assert.equal(json['15MinuteRate'].toFixed(3), '0.017');
+    assert.equal(json['oneMinuteRate'].toFixed(3), '0.233');
+    assert.equal(json['fiveMinuteRate'].toFixed(3), '0.049');
+    assert.equal(json['fifteenMinuteRate'].toFixed(3), '0.017');
   });
 
   it('mean rate', () => {

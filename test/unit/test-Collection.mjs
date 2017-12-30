@@ -1,6 +1,7 @@
 /* global describe, it, beforeEach, afterEach */
+import { describe, it, beforeEach } from 'mocha';
 import assert from 'assert';
-import Collection from '../../lib/Collection';
+import { Collection } from '../../lib/Collection';
 // var common = require('../common');
 // var assert = require('assert');
 
@@ -16,7 +17,6 @@ describe('Collection', () => {
     collection = new Collection('counters');
     const a = collection.counter('a');
     const b = collection.counter('b');
-
     a.inc(3);
     b.inc(5);
 

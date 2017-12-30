@@ -2,7 +2,7 @@
 import assert from 'assert';
 import sinon from 'sinon';
 import { describe, it, beforeEach } from 'mocha';
-import Stopwatch from '../../../lib/util/Stopwatch';
+import { Stopwatch } from '../../../lib/util/Stopwatch';
 // import * as units from '../../../lib/util/units';
 
 // var common    = require('../../common');
