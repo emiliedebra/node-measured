@@ -1,5 +1,5 @@
 # node-measured-es
-This is an expiremental ES6 and flow alternative to Felixge's measured module.
+This is an expiremental ES6 and Flow alternative to Felixge's `measured` module.
 ___
 
 [![Build Status](https://secure.travis-ci.org/felixge/node-measured.png)](http://travis-ci.org/felixge/node-measured)
