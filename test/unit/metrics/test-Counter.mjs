@@ -15,64 +15,64 @@ describe('Counter', () => {
 
   it('has initial value of 0', () => {
     const json = counter.toJSON();
-    assert.deepEqual(json, 0);
+    assert.deepEqual(json.value, 0);
   });
 
   it('can be initialized with a given count', () => {
     counter = new Counter({ count: 5 });
-    assert.equal(counter.toJSON(), 5);
+    assert.equal(counter.toJSON().value, 5);
   });
 
   it('#inc works incrementally', () => {
     counter.inc(5);
-    assert.equal(counter.toJSON(), 5);
+    assert.equal(counter.toJSON().value, 5);
 
     counter.inc(3);
-    assert.equal(counter.toJSON(), 8);
+    assert.equal(counter.toJSON().value, 8);
   });
 
   it('#inc defaults to 1', () => {
     counter.inc();
-    assert.equal(counter.toJSON(), 1);
+    assert.equal(counter.toJSON().value, 1);
 
     counter.inc();
-    assert.equal(counter.toJSON(), 2);
+    assert.equal(counter.toJSON().value, 2);
   });
 
   it('#inc adds zero', () => {
     counter.inc(0);
-    assert.equal(counter.toJSON(), 0);
+    assert.equal(counter.toJSON().value, 0);
   });
 
   it('#dec works incrementally', () => {
     counter.dec(3);
-    assert.equal(counter.toJSON(), -3);
+    assert.equal(counter.toJSON().value, -3);
 
     counter.dec(2);
-    assert.equal(counter.toJSON(), -5);
+    assert.equal(counter.toJSON().value, -5);
   });
 
   it('#dec defaults to 1', () => {
     counter.dec();
-    assert.equal(counter.toJSON(), -1);
+    assert.equal(counter.toJSON().value, -1);
 
     counter.dec();
-    assert.equal(counter.toJSON(), -2);
+    assert.equal(counter.toJSON().value, -2);
   });
 
   it('#dec subtracts zero', () => {
     counter.dec(0);
-    assert.equal(counter.toJSON(), 0);
+    assert.equal(counter.toJSON().value, 0);
   });
 
   it('#reset works', () => {
     counter.inc(23);
-    assert.equal(counter.toJSON(), 23);
+    assert.equal(counter.toJSON().value, 23);
 
     counter.reset();
-    assert.equal(counter.toJSON(), 0);
+    assert.equal(counter.toJSON().value, 0);
 
     counter.reset(50);
-    assert.equal(counter.toJSON(), 50);
+    assert.equal(counter.toJSON().value, 50);
   });
 });

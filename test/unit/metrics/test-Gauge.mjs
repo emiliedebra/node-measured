@@ -13,7 +13,7 @@ describe('Gauge', () => {
     // should work with common.measured.Gauge()
     const gauge = new Gauge(() => i++);
 
-    assert.equal(gauge.toJSON(), 0);
-    assert.equal(gauge.toJSON(), 1);
+    assert.equal(gauge.toJSON().value, 0);
+    assert.equal(gauge.toJSON().value, 1);
   });
 });

@@ -21,12 +21,13 @@ describe('Meter', () => {
 
   it('all values are correctly initialized', () => {
     assert.deepEqual(meter.toJSON(), {
+      type: 'METER',
       mean: 0,
       count: 0,
       currentRate: 0,
-      oneMinuteRate: 0,
-      fiveMinuteRate: 0,
-      fifteenMinuteRate: 0,
+      rate1Min: 0,
+      rate5Min: 0,
+      rate15Min: 0,
     });
   });
 
@@ -39,9 +40,9 @@ describe('Meter', () => {
     };
     const json = new Meter(properties).toJSON();
 
-    assert.equal(json['oneMinuteRate'].toFixed(0), '666');
-    assert.equal(json['fiveMinuteRate'].toFixed(0), '666');
-    assert.equal(json['fifteenMinuteRate'].toFixed(0), '666');
+    assert.equal(json.rate1Min.toFixed(0), '666');
+    assert.equal(json.rate5Min.toFixed(0), '666');
+    assert.equal(json.rate15Min.toFixed(0), '666');
   });
 
   it('decay over two marks and ticks', () => {
@@ -50,18 +51,18 @@ describe('Meter', () => {
 
     let json = meter.toJSON();
     assert.equal(json.count, 5);
-    assert.equal(json['oneMinuteRate'].toFixed(4), '0.0800');
-    assert.equal(json['fiveMinuteRate'].toFixed(4), '0.0165');
-    assert.equal(json['fifteenMinuteRate'].toFixed(4), '0.0055');
+    assert.equal(json.rate1Min.toFixed(4), '0.0800');
+    assert.equal(json.rate5Min.toFixed(4), '0.0165');
+    assert.equal(json.rate15Min.toFixed(4), '0.0055');
 
     meter.mark(10);
     meter._tick();
 
     json = meter.toJSON();
     assert.equal(json.count, 15);
-    assert.equal(json['oneMinuteRate'].toFixed(3), '0.233');
-    assert.equal(json['fiveMinuteRate'].toFixed(3), '0.049');
-    assert.equal(json['fifteenMinuteRate'].toFixed(3), '0.017');
+    assert.equal(json.rate1Min.toFixed(3), '0.233');
+    assert.equal(json.rate5Min.toFixed(3), '0.049');
+    assert.equal(json.rate15Min.toFixed(3), '0.017');
   });
 
   it('mean rate', () => {
@@ -120,7 +121,9 @@ describe('Meter', () => {
     let value;
     for (const key of Object.keys(json)) {
       value = json[key];
-      assert.ok(typeof value === 'number');
+      if (key !== 'type') {
+        assert.ok(typeof value === 'number');
+      }
     }
 
     meter.reset();
@@ -128,7 +131,9 @@ describe('Meter', () => {
 
     for (const key of Object.keys(json)) {
       value = json[key];
-      assert.ok(value === 0 || value === null);
+      if (key !== 'type') {
+        assert.ok(value === 0 || value === null);
+      }
     }
   });
 });

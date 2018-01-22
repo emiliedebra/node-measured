@@ -178,7 +178,9 @@ describe('Histogram#reset', () => {
     histogram.update(2);
     let json = histogram.toJSON();
     for (const key of Object.keys(json)) {
-      assert.ok(typeof json[key] === 'number');
+      if (key !== 'type') {
+        assert.ok(typeof json[key] === 'number');
+      }
     }
 
     histogram.reset();
@@ -186,7 +188,9 @@ describe('Histogram#reset', () => {
 
     for (const key of Object.keys(json)) {
       // console.log(json[key]);
-      assert.ok(json[key] === 0 || json[key] === null);
+      if (key !== 'type') {
+        assert.ok(json[key] === 0 || json[key] === null);
+      }
     }
   });
 });

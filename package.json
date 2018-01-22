@@ -1,13 +1,14 @@
 {
-  "author": "Felix Geisendörfer <felix@debuggable.com> (http://debuggable.com/)",
   "name": "measured",
+  "author": "Felix Geisendörfer <felix@debuggable.com> (http://debuggable.com/)",
   "description": "This is an alternative port of Coda Hale's metrics library.",
   "version": "1.1.0",
   "homepage": "https://github.com/felixge/node-measured",
   "engines": {
     "node": ">= 0.10"
   },
-  "main": "./index",
+  "main": "./index.mjs",
+  "module": "./index.mjs",
   "scripts": {
     "lint": "jslint --edition=latest --color './**/*.js'",
     "watch": "npm run test:node -- --watch",
