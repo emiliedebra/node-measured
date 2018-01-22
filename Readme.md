@@ -1,4 +1,6 @@
-# measured-es
+# node-measured-es
+This is an expiremental ES6 and flow alternative to Felixge's measured module.
+___
 
 [![Build Status](https://secure.travis-ci.org/felixge/node-measured.png)](http://travis-ci.org/felixge/node-measured)
 
@@ -14,7 +16,7 @@ and documented module.
 ## Install
 
 ```
-npm install measured
+npm install node-measured-es
 ```
 
 ## Usage
@@ -24,7 +26,7 @@ requests/sec of a http server:
 
 ```js
 var http  = require('http');
-var stats = require('measured').createCollection();
+var stats = require('node-measured-es').createCollection();
 
 http.createServer(function(req, res) {
   stats.meter('requestsPerSecond').mark();
