@@ -3,9 +3,6 @@ import assert from 'assert';
 import { describe, it, beforeEach } from 'mocha';
 import { ExponentiallyDecayingSample } from '../../../lib/util/ExponentiallyDecayingSample';
 import * as units from '../../../lib/util/units';
-// const common = require('../../common');
-// const EDS    = common.measured.ExponentiallyDecayingSample;
-// const units  = common.measured.units;
 
 describe('ExponentiallyDecayingSample#toSortedArray', () => {
   let sample;

@@ -6,12 +6,8 @@ import { Timer } from '../../../lib/metrics/Timer';
 import { Meter } from '../../../lib/metrics/Meter';
 import { Histogram } from '../../../lib/metrics/Histogram';
 
-// const common = require('../../common');
 const assert = require('assert');
 const sinon = require('sinon');
-// var Timer = common.measured.Timer;
-// var Histogram = common.measured.Histogram;
-// var Meter = common.measured.Meter;
 
 describe('Timer', () => {
   let timer;

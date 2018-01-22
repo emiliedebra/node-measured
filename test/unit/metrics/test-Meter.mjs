@@ -1,11 +1,9 @@
 /* global describe, it, beforeEach, afterEach */
 import { describe, it, beforeEach } from 'mocha';
 import { Meter } from '../../../lib/metrics/Meter';
-// import * as units from '../../../lib/util/units';
-// let common = require('../../common');
+
 const assert = require('assert');
 const sinon = require('sinon');
-// let units  = common.measured.units;
 
 describe('Meter', () => {
   let meter;

@@ -1,4 +1,4 @@
-/*  */
+/* @flow */
 import {
   Meter,
   Counter,
@@ -8,13 +8,15 @@ import {
 } from './metrics';
 
 export class Collection {
+  _name: string;
+  _metrics: Object;
 
-  constructor(name) {
+  constructor(name: string) {
     this._name = name;
     this._metrics = {};
   }
 
-  toJSON() {
+  toJSON(): Object {
     const json = {};
 
     for (const metric of Object.keys(this._metrics)) {
@@ -42,7 +44,7 @@ export class Collection {
 
   // Constructors of metric types
 
-  meter(name, properties = {}) {
+  meter(name: string, properties: Object = {}) {
     if (!name) {
       throw new Error('Collection.NoMetricName');
     }
@@ -52,7 +54,7 @@ export class Collection {
     return this._metrics[name];
   }
 
-  gauge(name, properties = {}) {
+  gauge(name: string, properties: Object = {}) {
     if (!name) {
       throw new Error('Collection.NoMetricName');
     }
@@ -62,7 +64,7 @@ export class Collection {
     return this._metrics[name];
   }
 
-  histogram(name, properties = {}) {
+  histogram(name: string, properties: Object = {}) {
     if (!name) {
       throw new Error('Collection.NoMetricName');
     }
@@ -72,7 +74,7 @@ export class Collection {
     return this._metrics[name];
   }
 
-  counter(name, properties = {}) {
+  counter(name: string, properties: Object = {}) {
     if (!name) {
       throw new Error('Collection.NoMetricName');
     }
@@ -82,7 +84,7 @@ export class Collection {
     return this._metrics[name];
   }
 
-  timer(name, properties) {
+  timer(name: string, properties: Object) {
     if (!name) {
       throw new Error('Collection.NoMetricName');
     }

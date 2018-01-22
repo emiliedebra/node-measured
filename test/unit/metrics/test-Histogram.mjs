@@ -2,12 +2,9 @@
 import { describe, it, beforeEach } from 'mocha';
 import { Histogram } from '../../../lib/metrics/Histogram';
 import { ExponentiallyDecayingSample } from '../../../lib/util/ExponentiallyDecayingSample';
-// import common from '../../common';
 
 const assert = require('assert');
 const sinon = require('sinon');
-// const Histogram = common.measured.Histogram;
-// const EDS = common.measured.ExponentiallyDecayingSample;
 
 describe('Histogram', () => {
   let histogram;

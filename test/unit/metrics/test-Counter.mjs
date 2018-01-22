@@ -2,10 +2,7 @@
 import { describe, it, beforeEach } from 'mocha';
 import { Counter } from '../../../lib/metrics/Counter';
 
-// const common = require('../../common');
 const assert = require('assert');
-
-// const { Counter } = common.measured;
 
 describe('Counter', () => {
   let counter;

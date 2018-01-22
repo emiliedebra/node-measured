@@ -1,4 +1,4 @@
-/*  */
+/* @flow */
 import { Meter } from './Meter';
 import { Histogram } from './Histogram';
 import { Stopwatch } from '../util/Stopwatch';
@@ -7,14 +7,17 @@ import { Stopwatch } from '../util/Stopwatch';
  * Measures rate as well as distribution of scalar events
 */
 export class Timer {
+  _meter: Meter;
+  _histogram: Histogram;
+  _getTime: Function;
 
-  constructor(properties = {}) {
+  constructor(properties: Object = {}) {
     this._meter = properties.meter || new Meter();
     this._histogram = properties.histogram || new Histogram();
     this._getTime = properties.getTime;
   }
 
-  start() {
+  start(): Stopwatch {
     const watch = new Stopwatch({ getTime: this._getTime });
 
     watch.once('end', (elapsed) => {
@@ -24,7 +27,7 @@ export class Timer {
     return watch;
   }
 
-  update(value) {
+  update(value: number) {
     this._meter.mark();
     this._histogram.update(value);
   }
@@ -46,7 +49,7 @@ export class Timer {
     this._meter.unref();
   }
 
-  toJSON() {
+  toJSON(): Object {
     return {
       type: 'TIMER',
       meter: this._meter.toJSON(),

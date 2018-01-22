@@ -1,16 +1,23 @@
-/*  */
+/* @flow */
 import { ExponentiallyDecayingSample } from '../util/ExponentiallyDecayingSample';
 /**
  * Class for keeping a resevoir of statistically relevant values biased towards the last 5 minutes
  * Holds count of number of values as well
 */
 export class Histogram {
+  _sample: ExponentiallyDecayingSample;
+  _min: ?number;
+  _max: ?number;
+  _count: number;
+  _sum: number;
+  _varianceM: number;
+  _varianceS: number;
 
-  constructor(properties = {}) {
+  constructor(properties: Object = {}) {
     this.init(properties);
   }
 
-  init(properties = {}) {
+  init(properties: Object = {}) {
     this._sample = properties.sample || new ExponentiallyDecayingSample();
     this._min = null;
     this._max = null;
@@ -23,8 +30,8 @@ export class Histogram {
     this._varianceS = 0;
   }
 
-  toJSON() {
-    const percentiles = this.percentiles([0.5, 0.75, 0.95, 0.99, 0.999]);
+  toJSON(): Object {
+    const percentiles: Object = this.percentiles([0.5, 0.75, 0.95, 0.99, 0.999]);
 
     return {
       type: 'HISTOGRAM',
@@ -43,7 +50,7 @@ export class Histogram {
     };
   }
 
-  update(value) {
+  update(value: number) {
     this._count++;
     this._sum += value;
 
@@ -58,25 +65,25 @@ export class Histogram {
     this.init();
   }
 
-  percentiles(percentiles) {
-    const values = this._sample
+  percentiles(percentiles: Array<number>): Object {
+    const values: Array<number> = this._sample
       .toArray()
       .sort((a, b) => ((a === b) ? 0 : a - b));
 
-    let results = {};
+    let results: Object = {};
 
     for (let i = 0; i < percentiles.length; i++) {
-      const percentile = percentiles[i];
+      const percentile: number = percentiles[i];
       if (values.length) {
-        const pos = percentile * (values.length + 1);
+        const pos: number = percentile * (values.length + 1);
         if (pos < 1) {
           results = { percentile: values[0] };
           // results[percentile] = values[0];
         } else if (pos >= values.length) {
           results[percentile] = values[values.length - 1];
         } else {
-          const lower = values[Math.floor(pos) - 1];
-          const upper = values[Math.ceil(pos) - 1];
+          const lower: number = values[Math.floor(pos) - 1];
+          const upper: number = values[Math.ceil(pos) - 1];
           results[percentile] =
             lower + ((pos - Math.floor(pos)) * (upper - lower));
         }
@@ -87,43 +94,43 @@ export class Histogram {
     return results;
   }
 
-  hasValues() {
+  hasValues(): boolean {
     return this._count > 0;
   }
 
 
-  _updateMin(value) {
+  _updateMin(value: number) {
     if (!this._min || value < this._min) {
       this._min = value;
     }
   }
 
-  _updateMax(value) {
+  _updateMax(value: number) {
     if (!this._max || value > this._max) {
       this._max = value;
     }
   }
 
-  _updateVariance(value) {
+  _updateVariance(value: number): ?number {
     if (this._count === 1) {
       this._varianceM = value;
       return value;
     }
-    const oldM = this._varianceM;
+    const oldM: number = this._varianceM;
 
     this._varianceM += ((value - oldM) / this._count);
     this._varianceS += ((value - oldM) * (value - this._varianceM));
   }
 
-  _calculateMean() {
+  _calculateMean(): number {
     return (this._count === 0) ? 0 : this._sum / this._count;
   }
 
-  _calculateVariance() {
+  _calculateVariance(): ?number {
     return (this._count <= 1) ? null : this._varianceS / (this._count - 1);
   }
 
-  _calculateStdDev() {
+  _calculateStdDev(): ?number {
     const calculateVariance = this._calculateVariance();
     if (calculateVariance) {
       return Math.sqrt(calculateVariance);

@@ -1,20 +1,30 @@
-/*  */
+/* @flow */
 
 import { BinaryHeap } from './BinaryHeap';
 import * as units from '../util/units';
 
 export class ExponentiallyDecayingSample {
+  _elements: BinaryHeap;
+  _rescaleInterval: number;
+  _alpha: number;
+  _size: number;
+  _random: Function;
+  _landmark: ?number;
+  _nextRescale: ?number;
 
   // constants
+  ALPHA: number;
+  RESCALE_INTERVAL: number;
+  SIZE: number;
 
-  constructor(options = {}) {
+  constructor(options: Object = {}) {
     // NOTE: Shouldn't be done here I don't think
     this.ALPHA = 0.015;
     this.RESCALE_INTERVAL = units.HOURS;
     this.SIZE = 1028;
 
     this._elements = new BinaryHeap({
-      score(element) {
+      score(element: Object) {
         return -element.priority;
       },
     });
@@ -28,7 +38,7 @@ export class ExponentiallyDecayingSample {
   }
 
   // NOTE: Using Date.now() twice yields different results?
-  update(value, timestamp = Date.now()) {
+  update(value: number, timestamp: number = Date.now()) {
     const now = Date.now();
     if (!this._landmark) {
       this._landmark = now;
@@ -57,35 +67,35 @@ export class ExponentiallyDecayingSample {
     }
   }
 
-  toSortedArray() {
+  toSortedArray(): Array<number> {
     return this._elements
       .toSortedArray()
       .map(element => (element.value));
   }
 
-  toArray() {
+  toArray(): Array<number> {
     return this._elements
       .toArray()
       .map(element => (element.value));
   }
 
-  _weight(age) {
+  _weight(age: number): number {
     // We divide by 1000 to not run into huge numbers before reaching a
     // rescale event.
     return Math.exp(this._alpha * (age / 1000));
   }
 
-  _priority(age) {
+  _priority(age: number): number {
     return this._weight(age) / this._random();
   }
 
-  static random() {
+  static random(): number {
     return Math.random();
   }
 
-  _rescale(now = Date.now()) {
+  _rescale(now: number = Date.now()) {
     // this._landmark should not be null at this point
-    const oldLandmark = this._landmark || now;
+    const oldLandmark: number = this._landmark || now;
     this._landmark = now;
     this._nextRescale = now + this._rescaleInterval;
     const factor = this._priority(-(this._landmark - oldLandmark));

@@ -3,12 +3,6 @@ import assert from 'assert';
 import sinon from 'sinon';
 import { describe, it, beforeEach } from 'mocha';
 import { Stopwatch } from '../../../lib/util/Stopwatch';
-// import * as units from '../../../lib/util/units';
-
-// var common    = require('../../common');
-// var assert    = require('assert');
-// var Stopwatch = common.measured.Stopwatch;
-// var sinon     = require('sinon');
 
 describe('Stopwatch', () => {
   let watch;

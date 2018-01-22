@@ -1,30 +1,32 @@
-/*  */
+/* @flow */
 // Based on http://en.wikipedia.org/wiki/Binary_Heap
 // as well as http://eloquentjavascript.net/appendix2.html
 
 export class BinaryHeap {
+  _elements: Array<Object>;
+  _score: Function;
 
-  constructor(options = {}) {
+  constructor(options: Object = {}) {
     this._elements = options.elements || [];
     this._score = options.score || BinaryHeap.score;
   }
 
-  add(...args) {
-    for (let i = 0; i < args.length; i++) {
-      const element = args[i];
+  add(...args: Array<Object>) {
+    for (let i: number = 0; i < args.length; i++) {
+      const element: Object = args[i];
 
       this._elements.push(element);
       this._bubble(this._elements.length - 1);
     }
   }
 
-  first() {
+  first(): Object {
     return this._elements[0];
   }
 
-  removeFirst() {
-    const root = this._elements[0];
-    const last = this._elements.pop();
+  removeFirst(): Object {
+    const root: Object = this._elements[0];
+    const last: Object = this._elements.pop();
 
     if (this._elements.length > 0) {
       this._elements[0] = last;
@@ -34,18 +36,18 @@ export class BinaryHeap {
     return root;
   }
 
-  clone() {
+  clone(): BinaryHeap {
     return new BinaryHeap({
       elements: this.toArray(),
       score: this._score,
     });
   }
 
-  toSortedArray() {
-    const clone = this.clone();
-    const array = [];
+  toSortedArray(): Array<Object> {
+    const clone: BinaryHeap = this.clone();
+    const array: Array<Object> = [];
 
-    let element = clone.removeFirst();
+    let element: Object = clone.removeFirst();
     while (element !== undefined) {
       array.push(element);
       element = clone.removeFirst();
@@ -53,21 +55,21 @@ export class BinaryHeap {
     return array;
   }
 
-  toArray() {
+  toArray(): Array<Object> {
     return [].concat(this._elements); // NOTE: Should use mapping instead?
   }
 
-  size() {
+  size(): number {
     return this._elements.length;
   }
 
-  _bubble(bubbleIndex) {
-    const bubbleElement = this._elements[bubbleIndex];
-    const bubbleScore = this._score(bubbleElement);
-    let parentIndex;
-    let parentElement;
-    let parentScore;
-    let _bubbleIndex = bubbleIndex;
+  _bubble(bubbleIndex: number) {
+    const bubbleElement: Object = this._elements[bubbleIndex];
+    const bubbleScore: number = this._score(bubbleElement);
+    let parentIndex: number;
+    let parentElement: Object;
+    let parentScore: number;
+    let _bubbleIndex: number = bubbleIndex;
 
     while (_bubbleIndex > 0) {
       parentIndex = BinaryHeap._parentIndex(_bubbleIndex);
@@ -84,14 +86,14 @@ export class BinaryHeap {
     }
   }
 
-  _sink(sinkIndex) {
-    const sinkElement = this._elements[sinkIndex];
-    const sinkScore = this._score(sinkElement);
+  _sink(sinkIndex: number) {
+    const sinkElement: Object = this._elements[sinkIndex];
+    const sinkScore: number = this._score(sinkElement);
     const { length } = this._elements;
-    let childIndex;
-    let childElement;
-    let childScore;
-    let _sinkIndex = sinkIndex;
+    let childIndex: ?number;
+    let childElement: Object;
+    let childScore: ?number;
+    let _sinkIndex: number = sinkIndex;
 
     while (true) {
       let swapIndex = null;
@@ -128,18 +130,18 @@ export class BinaryHeap {
     }
   }
 
-  static _parentIndex(index) {
+  static _parentIndex(index: number): number {
     return Math.floor((index - 1) / 2);
   }
 
-  static _childIndexes(index) {
+  static _childIndexes(index: number): Array<number> {
     return [
       (2 * index) + 1,
       (2 * index) + 2,
     ];
   }
 
-  static score(element) {
+  static score(element: Object): number {
     return element.valueOf();
   }
 }

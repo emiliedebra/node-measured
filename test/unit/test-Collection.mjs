@@ -1,19 +1,15 @@
 /* global describe, it, beforeEach, afterEach */
 import { describe, it, beforeEach } from 'mocha';
 import assert from 'assert';
-import { Collection } from '../../lib/Collection';
-// var common = require('../common');
-// var assert = require('assert');
+import { Collection } from '../..';
 
 describe('Collection', () => {
   let collection;
   beforeEach(() => {
-    // collection = common.measured.createCollection();
     collection = new Collection();
   });
 
   it('with two counters', () => {
-    // collection = new common.measured.Collection('counters');
     collection = new Collection('counters');
     const a = collection.counter('a');
     const b = collection.counter('b');

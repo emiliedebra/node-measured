@@ -1,4 +1,4 @@
-# measured
+# measured-es
 
 [![Build Status](https://secure.travis-ci.org/felixge/node-measured.png)](http://travis-ci.org/felixge/node-measured)
 

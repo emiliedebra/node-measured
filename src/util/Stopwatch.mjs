@@ -1,9 +1,12 @@
-/*  */
+/* @flow */
 import EventEmitter from 'events';
 
 export class Stopwatch extends EventEmitter {
+  _getTime: Function;
+  _start: number;
+  _ended: boolean;
 
-  constructor(options = {}) {
+  constructor(options: Object = {}) {
     super();
 
     this._getTime = options.getTime || Stopwatch.getTime;
@@ -12,7 +15,7 @@ export class Stopwatch extends EventEmitter {
   }
 
 
-  end() {
+  end(): ?number {
     if (this._ended) {
       return null;
     }
@@ -24,7 +27,7 @@ export class Stopwatch extends EventEmitter {
     return elapsed;
   }
 
-  static getTime() {
+  static getTime(): number {
     if (!process.hrtime) {
       return Date.now();
     }

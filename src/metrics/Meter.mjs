@@ -1,4 +1,4 @@
-/*  */
+/* @flow */
 import { ExponentiallyMovingWeightedAverage } from '../util/ExponentiallyMovingWeightedAverage';
 import * as units from '../util/units';
 
@@ -7,15 +7,27 @@ import * as units from '../util/units';
  * Holds count of number of values as well
 */
 export class Meter {
- // interval in which averages are updated
+  _rateUnit: number;
+  _tickInterval: number; // interval in which averages are updated
+  _m1Rate: ExponentiallyMovingWeightedAverage;
+  _m5Rate: ExponentiallyMovingWeightedAverage;
+  _m15Rate: ExponentiallyMovingWeightedAverage;
+  _count: number;
+  _currentSum: number;
+  _startTime: number;
+  _lastToJSON: number;
+  _interval: ?IntervalID;
+  _getTime: Function;
 
   // constants
+  TICK_INTERVAL: number;
+  RATE_UNIT: number;
 
-  constructor(properties = {}) {
+  constructor(properties: Object = {}) {
     this.init(properties);
   }
 
-  init(properties = {}) {
+  init(properties: Object = {}) {
     this.TICK_INTERVAL = 5 * units.SECONDS;
     this.RATE_UNIT = units.SECONDS;
     this._rateUnit = properties.rateUnit || this.RATE_UNIT;
@@ -32,7 +44,7 @@ export class Meter {
     this._interval = setInterval(this._tick.bind(this), this.TICK_INTERVAL);
   }
 
-  toJSON() {
+  toJSON(): Object {
     return {
       type: 'METER',
       mean: this.meanRate(),
@@ -50,7 +62,7 @@ export class Meter {
     this.init();
   }
 
-  mark(n = 1) {
+  mark(n: number = 1) {
     if (!this._interval) {
       Meter.start();
     }
@@ -74,14 +86,14 @@ export class Meter {
   }
 
   ref() {
-    const interval = this._interval;
+    const interval: any = this._interval;
     if (interval && interval.ref) {
       interval.ref();
     }
   }
 
   unref() {
-    const interval = this._interval;
+    const interval: any = this._interval;
     if (interval && interval.unref) {
       interval.unref();
     }
@@ -93,7 +105,7 @@ export class Meter {
     this._m15Rate.tick();
   }
 
-  meanRate() {
+  meanRate(): number {
     if (this._count === 0) {
       return 0;
     }
@@ -102,7 +114,7 @@ export class Meter {
     return (this._count / elapsed) * this._rateUnit;
   }
 
-  currentRate() {
+  currentRate(): number {
     const currentSum = this._currentSum;
     const duration = this._getTime() - this._lastToJSON;
     const currentRate = (currentSum / duration) * this._rateUnit;
@@ -114,7 +126,7 @@ export class Meter {
     return currentRate || 0;
   }
 
-  static getTime() {
+  static getTime(): number {
     if (!process.hrtime) {
       return new Date().getTime();
     }

@@ -1,9 +1,9 @@
-// /* @flow */
-// // import * as metrics from '../lib/metrics/index';
+/* @flow */
+// import http from 'http';
+// import { Collection } from '../lib/index';
 
-// const collection = new metrics.Collection('http');
+// const collection = new Collection('http');
 
-// const http = require('http');
 
 // const rps = collection.meter('requestsPerSecond');
 // http.createServer((req, res) => {

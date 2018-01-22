@@ -7,27 +7,17 @@
   "engines": {
     "node": ">= 0.10"
   },
-  "main": "./index.mjs",
-  "module": "./index.mjs",
+  "main": "./lib",
+  "module": "./src",
   "scripts": {
-    "lint": "jslint --edition=latest --color './**/*.js'",
-    "watch": "npm run test:node -- --watch",
-    "test:node-new": "./node_modules/.bin/_mocha -r @awt-node/esm './test/unit/**/test-*.mjs'",
-    "test:node": "mocha './test/**/test-*.js'",
-    "test:browser": "mochify './test/**/test-*.js'",
-    "wd": "mochify --wd './test/**/test-*.js'",
-    "pretest": "npm run lint",
-    "test-new": "npm run test:node-new",
-    "test": "npm run test:node && npm run test:browser"
-  },
-  "dependencies": {
-    "inherits": "^2.0"
+    "build": "rm -rf ./lib && flow-remove-types -p -d ./lib/ ./src/",
+    "test": "npm run build && mocha -r flow-remove-types/register -r @std/esm './test/unit/**/test-*.mjs'",
+    "publish": "npm run test"
   },
   "devDependencies": {
-    "@awt-node/esm": "^1.5.0",
-    "jslint": "^0.8",
+    "@std/esm": "^0.19.7",
+    "flow-remove-types": "^1.2.3",
     "mocha": "^2.1",
-    "mochify": "^2.1",
     "sinon": "^1.12"
   },
   "repository": {
@@ -39,5 +29,11 @@
     "Readme.md",
     "CHANGES.md"
   ],
+  "@std": {
+    "esm": {
+      "esm": "all",
+      "cjs": true
+    }
+  },
   "license": "MIT"
 }

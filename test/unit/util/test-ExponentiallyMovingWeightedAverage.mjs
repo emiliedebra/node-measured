@@ -4,11 +4,6 @@ import { describe, it } from 'mocha';
 import { ExponentiallyMovingWeightedAverage } from '../../../lib/util/ExponentiallyMovingWeightedAverage';
 import * as units from '../../../lib/util/units';
 
-// var common = require('../../common');
-// var assert = require('assert');
-// var units = common.measured.units;
-// var EMWA = common.measured.ExponentiallyMovingWeightedAverage;
-
 describe('ExponentiallyMovingWeightedAverage', () => {
   it('decay over several updates and ticks', () => {
     const ewma = new ExponentiallyMovingWeightedAverage(units.MINUTES, 5 * units.SECONDS);

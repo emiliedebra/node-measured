@@ -1,11 +1,17 @@
-/*  */
+/* @flow */
 import * as units from '../util/units';
 
 export class ExponentiallyMovingWeightedAverage {
+  _timePeriod: number;
+  _tickInterval: number;
+  _alpha: number;
+  _count: number;
+  _rate: number;
 
   // constant
+  TICK_INTERVAL: number;
 
-  constructor(timePeriod, tickInterval) {
+  constructor(timePeriod: number, tickInterval: number) {
     this.TICK_INTERVAL = 5 * units.SECONDS;
     this._timePeriod = timePeriod || units.MINUTES;
     this._tickInterval = tickInterval || this.TICK_INTERVAL;
@@ -14,7 +20,7 @@ export class ExponentiallyMovingWeightedAverage {
     this._rate = 0;
   }
 
-  update(n) {
+  update(n: number) {
     this._count += n;
   }
 
@@ -25,7 +31,7 @@ export class ExponentiallyMovingWeightedAverage {
     this._rate += (this._alpha * (instantRate - this._rate));
   }
 
-  rate(timeUnit) {
+  rate(timeUnit: number): number {
     return this._rate * timeUnit;
   }
 }

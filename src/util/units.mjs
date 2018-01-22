@@ -1,4 +1,4 @@
-/*  */
+/* @flow */
 // Time units, as found in Java:
 // http://download.oracle.com/
 //   javase/6/docs/api/java/util/concurrent/TimeUnit.html
