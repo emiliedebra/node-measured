@@ -10,10 +10,7 @@ export class Counter {
   }
 
   toJSON() {
-    return {
-      type: 'COUNTER',
-      value: this._count,
-    };
+    return this._count;
   }
 
   inc(n: number = 1) {

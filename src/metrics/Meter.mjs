@@ -46,7 +46,6 @@ export class Meter {
 
   toJSON(): Object {
     return {
-      type: 'METER',
       mean: this.meanRate(),
       count: this._count,
       currentRate: this.currentRate(),

@@ -19,7 +19,6 @@ describe('Meter', () => {
 
   it('all values are correctly initialized', () => {
     assert.deepEqual(meter.toJSON(), {
-      type: 'METER',
       mean: 0,
       count: 0,
       currentRate: 0,

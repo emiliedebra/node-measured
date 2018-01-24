@@ -16,11 +16,15 @@ export class Collection {
     this._metrics = {};
   }
 
-  toJSON(): Object {
+  toJSON(name: ?string): Object {
     const json = {};
-
-    for (const metric of Object.keys(this._metrics)) {
-      json[metric] = this._metrics[metric].toJSON();
+    const filter = name ? k => k === name : () => true;
+    for (const metric of Object.keys(this._metrics).filter(filter)) {
+      const content = {};
+      for (const metricType of Object.keys(this._metrics[metric])) {
+        content[metricType] = this._metrics[metric][metricType].toJSON();
+      }
+      json[metric] = content;
     }
 
     if (!this._name) {
@@ -42,16 +46,19 @@ export class Collection {
     }
   }
 
-  // Constructors of metric types
-
   meter(name: string, properties: Object = {}) {
     if (!name) {
       throw new Error('Collection.NoMetricName');
     }
     if (!this._metrics[name]) {
-      this._metrics[name] = new Meter(properties);
+      this._metrics[name] = {
+        METER: new Meter(properties),
+      };
+    } else if (!this._metrics[name].METER) {
+      this._metrics[name].METER = new Meter(properties);
     }
-    return this._metrics[name];
+    // if it already exists it returns existing metric
+    return this._metrics[name].METER;
   }
 
   gauge(name: string, properties: Object = {}) {
@@ -59,9 +66,13 @@ export class Collection {
       throw new Error('Collection.NoMetricName');
     }
     if (!this._metrics[name]) {
-      this._metrics[name] = new Gauge(properties);
+      this._metrics[name] = {
+        GAUGE: new Gauge(properties),
+      };
+    } else if (!this._metrics[name].GAUGE) {
+      this._metrics[name].GAUGE = new Gauge(properties);
     }
-    return this._metrics[name];
+    return this._metrics[name].GAUGE;
   }
 
   histogram(name: string, properties: Object = {}) {
@@ -69,9 +80,13 @@ export class Collection {
       throw new Error('Collection.NoMetricName');
     }
     if (!this._metrics[name]) {
-      this._metrics[name] = new Histogram(properties);
+      this._metrics[name] = {
+        HISTOGRAM: new Histogram(properties),
+      };
+    } else if (!this._metrics[name].HISTOGRAM) {
+      this._metrics[name].HISTOGRAM = new Histogram(properties);
     }
-    return this._metrics[name];
+    return this._metrics[name].HISTOGRAM;
   }
 
   counter(name: string, properties: Object = {}) {
@@ -79,9 +94,13 @@ export class Collection {
       throw new Error('Collection.NoMetricName');
     }
     if (!this._metrics[name]) {
-      this._metrics[name] = new Counter(properties);
+      this._metrics[name] = {
+        COUNTER: new Counter(properties),
+      };
+    } else if (!this._metrics[name].COUNTER) {
+      this._metrics[name].COUNTER = new Counter(properties);
     }
-    return this._metrics[name];
+    return this._metrics[name].COUNTER;
   }
 
   timer(name: string, properties: Object) {
@@ -89,8 +108,12 @@ export class Collection {
       throw new Error('Collection.NoMetricName');
     }
     if (!this._metrics[name]) {
-      this._metrics[name] = new Timer(properties);
+      this._metrics[name] = {
+        TIMER: new Timer(properties),
+      };
+    } else if (!this._metrics[name].TIMER) {
+      this._metrics[name].TIMER = new Timer(properties);
     }
-    return this._metrics[name];
+    return this._metrics[name].TIMER;
   }
 }

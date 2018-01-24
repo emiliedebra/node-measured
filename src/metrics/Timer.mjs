@@ -51,7 +51,6 @@ export class Timer {
 
   toJSON(): Object {
     return {
-      type: 'TIMER',
       meter: this._meter.toJSON(),
       histogram: this._histogram.toJSON(),
     };

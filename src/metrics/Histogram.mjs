@@ -34,7 +34,6 @@ export class Histogram {
     const percentiles: Object = this.percentiles([0.5, 0.75, 0.95, 0.99, 0.999]);
 
     return {
-      type: 'HISTOGRAM',
       min: this._min,
       max: this._max,
       sum: this._sum,
