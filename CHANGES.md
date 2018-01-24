@@ -1,11 +1,4 @@
 # Changes
-## 2.0.1
-
-- Adapt output formats and allow multiple metrics per name
-
-## 2.0.0
-
-- Change to ES6
 ## 1.1.0
 
 - Add Histogram#hasValues (Fredrik Hörte)
