@@ -1,22 +1,11 @@
 # node-measured-es
-This is an expiremental ES6 and Flow alternative to Felixge's `measured` module.
+This is an expiremental ES6 and Flow metrics module inspired by and adapted from Felixge's `measured` module.
 ___
-
-[![Build Status](https://secure.travis-ci.org/felixge/node-measured.png)](http://travis-ci.org/felixge/node-measured)
-
-This is an alternative port of Coda Hale's [metrics library][codametrics].
-
-I created this despite the existing [metrics port][existingmetrics] for node.js
-to fully understand the underlaying algorithms, and to provide a solid, tested
-and documented module.
-
-[codametrics]:  https://github.com/codahale/metrics
-[existingmetrics]: https://github.com/mikejihbe/metrics
 
 ## Install
 
 ```
-npm install node-measured-es
+npm install node-measured#node-measured-es
 ```
 
 ## Usage
@@ -25,8 +14,10 @@ npm install node-measured-es
 requests/sec of a http server:
 
 ```js
-var http  = require('http');
-var stats = require('node-measured-es').createCollection();
+const http  = require('http');
+import { Collection } from 'node-measured-es';
+
+const stats = new Collection('metrics');
 
 http.createServer(function(req, res) {
   stats.meter('requestsPerSecond').mark();
@@ -45,16 +36,18 @@ setInterval(function() {
 This will output something like this every second:
 
 ```
+metrics:
 { requestsPerSecond:
+  METER:
    { mean: 1710.2180279856818,
      count: 10511,
      'currentRate': 1941.4893498239829,
-     '1MinuteRate': 168.08263156623656,
-     '5MinuteRate': 34.74630977619571,
-     '15MinuteRate': 11.646507524106095 } }
+     'rate1Min': 168.08263156623656,
+     'rate5Min': 34.74630977619571,
+     'rate15Min': 11.646507524106095 } }
 ```
 
-**Step 3:** Aggregate the data into your backend of choice. I recommend
+**Step 3:** Aggregate the data into your backend of choice. Felixge recommend's
 [graphite][].
 
 [graphite]: http://graphite.wikidot.com/
@@ -68,8 +61,8 @@ The following metrics are available (both standalone and on the Collection API):
 Values that can be read instantly. Example:
 
 ```js
-var Measured = require('node-measured-es')
-var gauge = new Measured.Gauge(function() {
+import { metrics } from 'node-measured-es';
+var gauge = new metrics.Gauge(() => {
   return process.memoryUsage().rss;
 });
 ```
@@ -95,8 +88,8 @@ Gauges directly return their currently value.
 Things that increment or decrement. Example:
 
 ```js
-var Measured = require('node-measured-es')
-var activeUploads = new Measured.Counter();
+import { metrics } from 'node-measured-es';
+const activeUploads = new metrics.Counter();
 http.createServer(function(req, res) {
   activeUploads.inc();
   req.on('end', function() {
@@ -117,16 +110,16 @@ http.createServer(function(req, res) {
 
 **toJSON Output:**
 
-Counters directly return their currently value.
+Counters directly return their current value.
 
 ### Meter
 
 Things that are measured as events / interval. Example:
 
 ```js
-var Measured = require('node-measured-es')
-var meter = new Measured.Meter();
-http.createServer(function(req, res) {
+import { metrics } from 'node-measured-es')
+const meter = new metrics.Meter();
+http.createServer((req, res) => {
   meter.mark();
 });
 ```
@@ -151,9 +144,9 @@ http.createServer(function(req, res) {
 * `mean`: The average rate since the meter was started.
 * `count`: The total of all values added to the meter.
 * `currentRate`: The rate of the meter since the last toJSON() call.
-* `1MinuteRate`: The rate of the meter biased towards the last 1 minute.
-* `5MinuteRate`: The rate of the meter biased towards the last 5 minutes.
-* `15MinuteRate`: The rate of the meter biased towards the last 15 minutes.
+* `rate1Min`: The rate of the meter biased towards the last 1 minute.
+* `rate5Min`: The rate of the meter biased towards the last 5 minutes.
+* `rate15Min`: The rate of the meter biased towards the last 15 minutes.
 
 ### Histogram
 
@@ -161,9 +154,9 @@ Keeps a resevoir of statistically relevant values biased towards the last 5
 minutes to explore their distribution. Example:
 
 ```js
-var Measured = require('node-measured-es')
-var histogram = new Measured.Histogram();
-http.createServer(function(req, res) {
+import { metrics } from 'node-measured-es';
+const histogram = new metrics.Histogram();
+http.createServer((req, res) => {
   if (req.headers['content-length']) {
     histogram.update(parseInt(req.headers['content-length'], 10));
   }
@@ -204,9 +197,9 @@ well as distribution of scalar events. Since they are frequently used for
 tracking how long certain things take, they expose an API for that:
 
 ```js
-var Measured = require('node-measured-es')
-var timer = new Measured.Timer();
-http.createServer(function(req, res) {
+import { metrics } from 'node-measured-es';
+const timer = new metrics.Timer();
+http.createServe((req, res) => {
   var stopwatch = timer.start();
   req.on('end', function() {
     stopwatch.end();
@@ -218,9 +211,9 @@ But you can also use them as generic histograms that also track the rate of
 events:
 
 ```js
-var Measured = require('node-measured-es')
-var timer = new Measured.Timer();
-http.createServer(function(req, res) {
+import { metrics } from 'node-measured-es';
+const timer = new metrics.Timer();
+http.createServer((req, res) => {
   if (req.headers['content-length']) {
     timer.update(parseInt(req.headers['content-length'], 10));
   }
@@ -247,12 +240,6 @@ http.createServer(function(req, res) {
 
 * `meter`: See Meter toJSON output docs above.
 * `histogram`: See Histogram toJSON output docs above.
-
-## Todo
-
-* Implement flatten() so reporters can use it
-* Implement async gauges
-* Document using this with graphite / zabbix
 
 ## License
 
