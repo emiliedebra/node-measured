@@ -1,4 +1,8 @@
 # Changes
+
+## 2.0.0
+
+- Change to ES6 and adapt JSON object structuring
 ## 1.1.0
 
 - Add Histogram#hasValues (Fredrik Hörte)
