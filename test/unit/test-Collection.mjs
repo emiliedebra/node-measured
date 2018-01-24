@@ -56,6 +56,16 @@ describe('Collection', () => {
     }, /Collection\.NoMetricName/);
   });
 
+  it('outputs single metrics when passed a name parameter', () => {
+    collection.counter('a');
+    collection.counter('b');
+    assert.deepEqual(collection.toJSON('a'), {
+      a: {
+        COUNTER: 0,
+      },
+    });
+  });
+
   it('adds different metric types to the same metric object when given the same name', () => {
     collection = new Collection('metrics');
     collection.counter('a');
