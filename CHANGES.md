@@ -1,5 +1,11 @@
 # Changes
+## 2.0.1
 
+- Adapt output formats and allow multiple metrics per name
+
+## 2.0.0
+
+- Change to ES6
 ## 1.1.0
 
 - Add Histogram#hasValues (Fredrik Hörte)
@@ -36,4 +42,3 @@
 
 - Fix `this` in closure and typo (Jonas Dohse)
 - Provide `Collection.end()` to shutdown internal intervals (Jonas Dohse)
-
