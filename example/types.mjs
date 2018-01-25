@@ -1,16 +1,17 @@
 /* @flow */
-declare type GaugeOutput = {
-  type: 'GAUGE',
-  value: number,
+declare type CollectionOutput = {
+  GAUGE: ?GaugeOutput,
+  COUNTER: ?CounterOutput,
+  METER: ?MeterOutput,
+  HISTOGRAM: ?HistogramOutput,
+  TIMER: ?TimerOutput,
 }
 
-declare type CounterOutput = {
-  type: 'COUNTER',
-  value: number,
-};
+declare type GaugeOutput = number;
+
+declare type CounterOutput = number;
 
 declare type MeterOutput = {
-  type: 'METER',
   mean: number,
   count: number,
   currentRate: number,
@@ -20,7 +21,6 @@ declare type MeterOutput = {
 }
 
 declare type HistogramOutput = {
-  type: 'HISTOGRAM',
   min: ?number,
   max: ?number,
   sum: number,
@@ -36,7 +36,6 @@ declare type HistogramOutput = {
 }
 
 declare type TimerOutput = {
-  type: 'TIMER',
   meter: MeterOutput,
   histogram: HistogramOutput,
 }
