@@ -8,8 +8,9 @@ import type {
 export class Counter {
   _count: number;
 
-  constructor(properties: Object = {}) {
-    this._count = properties.count || 0;
+  constructor(count: number = 0) {
+  // constructor(properties: Object = {}) {
+    this._count = count; // || 0;
   }
 
   toJSON(): TCounterOutput {

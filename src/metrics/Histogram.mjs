@@ -16,12 +16,13 @@ export class Histogram {
   _varianceM: number;
   _varianceS: number;
 
-  constructor(properties: Object = {}) {
-    this.init(properties);
+  constructor(sample: ?ExponentiallyDecayingSample) {
+    this.init(sample);
   }
 
-  init(properties: Object = {}) {
-    this._sample = properties.sample || new ExponentiallyDecayingSample();
+  // init(properties: Object = {}) {
+  init(sample: ?ExponentiallyDecayingSample) {
+    this._sample = sample || new ExponentiallyDecayingSample();
     this._min = null;
     this._max = null;
     this._count = 0;
@@ -93,6 +94,7 @@ export class Histogram {
         results[percentile] = null;
       }
     }
+    console.log(results);
     return results;
   }
 

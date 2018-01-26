@@ -34,7 +34,7 @@ describe('Histogram#update', () => {
   let histogram;
   beforeEach(() => {
     sample = sinon.stub(new ExponentiallyDecayingSample());
-    histogram = new Histogram({ sample });
+    histogram = new Histogram(sample);
 
     sample.toArray.returns([]);
   });
@@ -132,7 +132,7 @@ describe('Histogram#percentiles', () => {
   let histogram;
   beforeEach(() => {
     sample = sinon.stub(new ExponentiallyDecayingSample());
-    histogram = new Histogram({ sample });
+    histogram = new Histogram(sample);
 
     const values = [];
     let i;
@@ -167,7 +167,7 @@ describe('Histogram#reset', () => {
   let histogram;
   beforeEach(() => {
     sample = new ExponentiallyDecayingSample();
-    histogram = new Histogram({ sample });
+    histogram = new Histogram(sample);
   });
 
   it('resets all values', () => {

@@ -16,7 +16,7 @@ describe('Counter', () => {
   });
 
   it('can be initialized with a given count', () => {
-    counter = new Counter({ count: 5 });
+    counter = new Counter(5);
     assert.equal(counter.toJSON(), 5);
   });
 

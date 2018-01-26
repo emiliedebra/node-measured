@@ -7,6 +7,10 @@ import {
   Timer,
 } from './metrics';
 
+import {
+  ExponentiallyDecayingSample,
+} from './util';
+
 import type {
   TCollectionOutput,
   TMetricOutput,
@@ -82,30 +86,30 @@ export class Collection {
     return this._metrics[name].GAUGE;
   }
 
-  histogram(name: string, properties: Object = {}): Histogram {
+  histogram(name: string, sample: ExponentiallyDecayingSample): Histogram {
     if (!name) {
       throw new Error('Collection.NoMetricName');
     }
     if (!this._metrics[name]) {
       this._metrics[name] = {
-        HISTOGRAM: new Histogram(properties),
+        HISTOGRAM: new Histogram(sample),
       };
     } else if (!this._metrics[name].HISTOGRAM) {
-      this._metrics[name].HISTOGRAM = new Histogram(properties);
+      this._metrics[name].HISTOGRAM = new Histogram(sample);
     }
     return this._metrics[name].HISTOGRAM;
   }
 
-  counter(name: string, properties: Object = {}): Counter {
+  counter(name: string, count: ?number): Counter {
     if (!name) {
       throw new Error('Collection.NoMetricName');
     }
     if (!this._metrics[name]) {
       this._metrics[name] = {
-        COUNTER: new Counter(properties),
+        COUNTER: new Counter(count),
       };
     } else if (!this._metrics[name].COUNTER) {
-      this._metrics[name].COUNTER = new Counter(properties);
+      this._metrics[name].COUNTER = new Counter(count);
     }
     return this._metrics[name].COUNTER;
   }
