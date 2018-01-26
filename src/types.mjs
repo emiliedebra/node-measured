@@ -3,11 +3,11 @@ export type TMetricCollectionOutput = {
   [key: string]: TMetricOutput;
 }
 export type TMetricOutput = {
-  [key: TMetricType]: TMetric;
+  [key: ?string]: TMetric;
 }
 
 export type TMetric = TCounterOutput | TGaugeOutput | TMeterOutput | TTimerOutput | THistogramOutput;
-export type TMetricType = 'GAUGE' | 'METER' | 'COUNTER' | 'TIMER' | 'HISTOGRAM';
+export type TMetricConstant = 'GAUGE' | 'METER' | 'COUNTER' | 'TIMER' | 'HISTOGRAM';
 
 export type TCollectionOutput = {
   [key: ?string]: TMetricCollectionOutput;

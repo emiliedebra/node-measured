@@ -23,7 +23,7 @@ export class Timer {
   start(): Stopwatch {
     const watch = new Stopwatch({ getTime: this._getTime });
 
-    watch.once('end', (elapsed) => {
+    watch.once('end', (elapsed: number) => {
       this.update(elapsed);
     });
 

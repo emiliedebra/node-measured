@@ -15,11 +15,18 @@ import type {
   TCollectionOutput,
   TMetricOutput,
   TMetricCollectionOutput,
+  // TMetricConstant,
 } from './types';
 
+declare type TMetricDef = Meter | Counter | Histogram | Timer | Gauge;
+declare type TMetricCollection = {
+  [key: ?string]: {
+    [key: ?string]: TMetricDef
+  }
+}
 export class Collection {
   _name: string;
-  _metrics: Object;
+  _metrics: TMetricCollection;
 
   constructor(name: string) {
     this._name = name;
@@ -86,7 +93,7 @@ export class Collection {
     return this._metrics[name].GAUGE;
   }
 
-  histogram(name: string, sample: ExponentiallyDecayingSample): Histogram {
+  histogram(name: string, sample: ?ExponentiallyDecayingSample): Histogram {
     if (!name) {
       throw new Error('Collection.NoMetricName');
     }

@@ -3,6 +3,10 @@ import { ExponentiallyDecayingSample } from '../util/ExponentiallyDecayingSample
 import type {
   THistogramOutput,
 } from '../types';
+
+declare type percentileObject = {
+  [key: ?string | ?number]: number;
+}
 /**
  * Class for keeping a resevoir of statistically relevant values biased towards the last 5 minutes
  * Holds count of number of values as well
@@ -35,7 +39,7 @@ export class Histogram {
   }
 
   toJSON(): THistogramOutput {
-    const percentiles: Object = this.percentiles([0.5, 0.75, 0.95, 0.99, 0.999]);
+    const percentiles: percentileObject = this.percentiles([0.5, 0.75, 0.95, 0.99, 0.999]);
 
     return {
       min: this._min,
@@ -68,7 +72,7 @@ export class Histogram {
     this.init();
   }
 
-  percentiles(percentiles: Array<number>): Object {
+  percentiles(percentiles: Array<number>): percentileObject {
     const values: Array<number> = this._sample
       .toArray()
       .sort((a, b) => ((a === b) ? 0 : a - b));
@@ -94,7 +98,6 @@ export class Histogram {
         results[percentile] = null;
       }
     }
-    console.log(results);
     return results;
   }
 
