@@ -46,6 +46,7 @@ export class Meter {
     this._interval = setInterval(this._tick.bind(this), this.TICK_INTERVAL);
   }
 
+  // output JSON
   toJSON(): TMeterOutput {
     return {
       mean: this.meanRate(),
@@ -63,10 +64,11 @@ export class Meter {
     this.init();
   }
 
+  // update meter values
   mark(n: number = 1) {
-    if (!this._interval) {
-      Meter.start();
-    }
+    // if (!this._interval) {
+    //   Meter.start();
+    // }
 
     this._count += n;
     this._currentSum += n;
@@ -75,10 +77,12 @@ export class Meter {
     this._m15Rate.update(n);
   }
 
+  // NOTE: Not really used
   static start() {
     return null;
   }
 
+  // clear interval
   end() {
     if (this._interval) {
       clearInterval(this._interval);
@@ -106,6 +110,7 @@ export class Meter {
     this._m15Rate.tick();
   }
 
+  // returns the average rate
   meanRate(): number {
     if (this._count === 0) {
       return 0;
@@ -115,6 +120,7 @@ export class Meter {
     return (this._count / elapsed) * this._rateUnit;
   }
 
+  // returns the current rate
   currentRate(): number {
     const currentSum = this._currentSum;
     const duration = this._getTime() - this._lastToJSON;
@@ -123,7 +129,6 @@ export class Meter {
     this._currentSum = 0;
     this._lastToJSON = this._getTime();
 
-    // currentRate could be NaN if duration was 0, so fix that
     return currentRate || 0;
   }
 

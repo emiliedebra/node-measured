@@ -12,6 +12,7 @@ export class Gauge {
     this._readFn = readFn;
   }
   // This is sync for now, but maybe async gauges would be useful as well?
+  // output to JSON by calling read function
   toJSON(): TGaugeOutput {
     return this._readFn();
   }

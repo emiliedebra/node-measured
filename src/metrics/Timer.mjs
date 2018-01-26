@@ -20,6 +20,7 @@ export class Timer {
     this._getTime = properties.getTime;
   }
 
+  // starts the stopwatch
   start(): Stopwatch {
     const watch = new Stopwatch({ getTime: this._getTime });
 
@@ -30,16 +31,19 @@ export class Timer {
     return watch;
   }
 
+  // update meter and histogram values
   update(value: number) {
     this._meter.mark();
     this._histogram.update(value);
   }
 
+  // resets meter and histogram
   reset() {
     this._meter.reset();
     this._histogram.reset();
   }
 
+  // ends the meter (clears interval)
   end() {
     this._meter.end();
   }
@@ -52,6 +56,7 @@ export class Timer {
     this._meter.unref();
   }
 
+  // outputs JSON
   toJSON(): TTimerOutput {
     return {
       meter: this._meter.toJSON(),

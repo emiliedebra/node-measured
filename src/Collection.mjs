@@ -15,7 +15,6 @@ import type {
   TCollectionOutput,
   TMetricOutput,
   TMetricCollectionOutput,
-  // TMetricConstant,
 } from './types';
 
 declare type TMetricDef = Meter | Counter | Histogram | Timer | Gauge;
@@ -44,7 +43,7 @@ export class Collection {
       json[metric] = content;
     }
 
-    // You have to pass it a name so should never get here
+    // NOTE: You should have to pass it a name so should never get here
     if (!this._name) {
       this._name = '';
     }
@@ -55,6 +54,7 @@ export class Collection {
     return wrapper;
   }
 
+  // end collection by ending all metrics indvidually
   end() {
     const metrics = this._metrics;
     for (const name of Object.keys(metrics)) {
@@ -64,6 +64,7 @@ export class Collection {
     }
   }
 
+  // constructor for a Meter metric
   meter(name: string, properties: Object = {}): Meter {
     if (!name) {
       throw new Error('Collection.NoMetricName');
@@ -79,6 +80,7 @@ export class Collection {
     return this._metrics[name].METER;
   }
 
+  // constructor for a Gauge metric
   gauge(name: string, properties: Object = {}): Gauge {
     if (!name) {
       throw new Error('Collection.NoMetricName');
@@ -93,6 +95,7 @@ export class Collection {
     return this._metrics[name].GAUGE;
   }
 
+  // constructor for a Histogram metric
   histogram(name: string, sample: ?ExponentiallyDecayingSample): Histogram {
     if (!name) {
       throw new Error('Collection.NoMetricName');
@@ -107,6 +110,7 @@ export class Collection {
     return this._metrics[name].HISTOGRAM;
   }
 
+  // constructor for a Counter metric
   counter(name: string, count: ?number): Counter {
     if (!name) {
       throw new Error('Collection.NoMetricName');
@@ -121,6 +125,7 @@ export class Collection {
     return this._metrics[name].COUNTER;
   }
 
+  // constructor for a Timer metric
   timer(name: string, properties: Object): Timer {
     if (!name) {
       throw new Error('Collection.NoMetricName');

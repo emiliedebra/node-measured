@@ -8,7 +8,7 @@ declare type percentileObject = {
   [key: ?string | ?number]: number;
 }
 /**
- * Class for keeping a resevoir of statistically relevant values biased towards the last 5 minutes
+ * Class for keeping a reservoir of statistically relevant values biased towards the last 5 minutes
  * Holds count of number of values as well
 */
 export class Histogram {
@@ -24,7 +24,6 @@ export class Histogram {
     this.init(sample);
   }
 
-  // init(properties: Object = {}) {
   init(sample: ?ExponentiallyDecayingSample) {
     this._sample = sample || new ExponentiallyDecayingSample();
     this._min = null;
@@ -38,6 +37,7 @@ export class Histogram {
     this._varianceS = 0;
   }
 
+  // output to JSON
   toJSON(): THistogramOutput {
     const percentiles: percentileObject = this.percentiles([0.5, 0.75, 0.95, 0.99, 0.999]);
 
@@ -49,7 +49,7 @@ export class Histogram {
       mean: this._calculateMean(),
       stddev: this._calculateStdDev(),
       count: this._count, // number of values
-      median: percentiles[0.5], // value at which 50% of the values in resevoir are at or below
+      median: percentiles[0.5], // value at which 50% of the values in reservoir are at or below
       p75: percentiles[0.75],
       p95: percentiles[0.95],
       p99: percentiles[0.99],
@@ -57,6 +57,7 @@ export class Histogram {
     };
   }
 
+  // update histogram values
   update(value: number) {
     this._count++;
     this._sum += value;
@@ -72,6 +73,7 @@ export class Histogram {
     this.init();
   }
 
+  // calculate percentiles given an array of number values
   percentiles(percentiles: Array<number>): percentileObject {
     const values: Array<number> = this._sample
       .toArray()
@@ -84,8 +86,7 @@ export class Histogram {
       if (values.length) {
         const pos: number = percentile * (values.length + 1);
         if (pos < 1) {
-          results = { percentile: values[0] };
-          // results[percentile] = values[0];
+          results = { ...results, [percentile]: values[0] };
         } else if (pos >= values.length) {
           results[percentile] = values[values.length - 1];
         } else {
@@ -101,6 +102,7 @@ export class Histogram {
     return results;
   }
 
+  // check that histogram has values to work with
   hasValues(): boolean {
     return this._count > 0;
   }
