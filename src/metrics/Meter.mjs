@@ -1,7 +1,9 @@
 /* @flow */
 import { ExponentiallyMovingWeightedAverage } from '../util/ExponentiallyMovingWeightedAverage';
 import * as units from '../util/units';
-
+import type {
+  TMeterOutput,
+} from '../types';
 /**
  * Class for metric of things that are measured as an event/interval
  * Holds count of number of values as well
@@ -44,7 +46,7 @@ export class Meter {
     this._interval = setInterval(this._tick.bind(this), this.TICK_INTERVAL);
   }
 
-  toJSON(): Object {
+  toJSON(): TMeterOutput {
     return {
       mean: this.meanRate(),
       count: this._count,

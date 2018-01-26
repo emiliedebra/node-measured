@@ -2,6 +2,9 @@
 import { Meter } from './Meter';
 import { Histogram } from './Histogram';
 import { Stopwatch } from '../util/Stopwatch';
+import type {
+  TTimerOutput,
+} from '../types';
 /**
  * Combination of Meters and Histograms
  * Measures rate as well as distribution of scalar events
@@ -49,7 +52,7 @@ export class Timer {
     this._meter.unref();
   }
 
-  toJSON(): Object {
+  toJSON(): TTimerOutput {
     return {
       meter: this._meter.toJSON(),
       histogram: this._histogram.toJSON(),

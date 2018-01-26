@@ -1,5 +1,8 @@
 /* @flow */
 import { ExponentiallyDecayingSample } from '../util/ExponentiallyDecayingSample';
+import type {
+  THistogramOutput,
+} from '../types';
 /**
  * Class for keeping a resevoir of statistically relevant values biased towards the last 5 minutes
  * Holds count of number of values as well
@@ -30,7 +33,7 @@ export class Histogram {
     this._varianceS = 0;
   }
 
-  toJSON(): Object {
+  toJSON(): THistogramOutput {
     const percentiles: Object = this.percentiles([0.5, 0.75, 0.95, 0.99, 0.999]);
 
     return {

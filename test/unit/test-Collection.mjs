@@ -59,10 +59,11 @@ describe('Collection', () => {
   it('outputs single metrics when passed a name parameter', () => {
     collection.counter('a');
     collection.counter('b');
-    assert.deepEqual(collection.toJSON('a'), {
+    assert.deepEqual(collection.toJSON('a'), { '': {
       a: {
         COUNTER: 0,
       },
+    },
     });
   });
 

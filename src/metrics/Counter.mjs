@@ -1,4 +1,7 @@
 /* @flow */
+import type {
+  TCounterOutput,
+} from '../types';
 /**
  * Class for metrics that increment and decrement
 */
@@ -9,7 +12,7 @@ export class Counter {
     this._count = properties.count || 0;
   }
 
-  toJSON() {
+  toJSON(): TCounterOutput {
     return this._count;
   }
 

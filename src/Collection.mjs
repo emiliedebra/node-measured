@@ -7,6 +7,12 @@ import {
   Timer,
 } from './metrics';
 
+import type {
+  TCollectionOutput,
+  TMetricOutput,
+  TMetricCollectionOutput,
+} from './types';
+
 export class Collection {
   _name: string;
   _metrics: Object;
@@ -16,22 +22,23 @@ export class Collection {
     this._metrics = {};
   }
 
-  toJSON(name: ?string): Object {
-    const json = {};
+  toJSON(name: ?string): TCollectionOutput {
+    const json: TMetricCollectionOutput = {};
     const filter = name ? k => k === name : () => true;
     for (const metric of Object.keys(this._metrics).filter(filter)) {
-      const content = {};
+      const content: TMetricOutput = {};
       for (const metricType of Object.keys(this._metrics[metric])) {
         content[metricType] = this._metrics[metric][metricType].toJSON();
       }
       json[metric] = content;
     }
 
+    // You have to pass it a name so should never get here
     if (!this._name) {
-      return json;
+      this._name = '';
     }
 
-    const wrapper = {};
+    const wrapper: TCollectionOutput = {};
     wrapper[this._name] = json;
 
     return wrapper;
@@ -46,7 +53,7 @@ export class Collection {
     }
   }
 
-  meter(name: string, properties: Object = {}) {
+  meter(name: string, properties: Object = {}): Meter {
     if (!name) {
       throw new Error('Collection.NoMetricName');
     }
@@ -61,7 +68,7 @@ export class Collection {
     return this._metrics[name].METER;
   }
 
-  gauge(name: string, properties: Object = {}) {
+  gauge(name: string, properties: Object = {}): Gauge {
     if (!name) {
       throw new Error('Collection.NoMetricName');
     }
@@ -75,7 +82,7 @@ export class Collection {
     return this._metrics[name].GAUGE;
   }
 
-  histogram(name: string, properties: Object = {}) {
+  histogram(name: string, properties: Object = {}): Histogram {
     if (!name) {
       throw new Error('Collection.NoMetricName');
     }
@@ -89,7 +96,7 @@ export class Collection {
     return this._metrics[name].HISTOGRAM;
   }
 
-  counter(name: string, properties: Object = {}) {
+  counter(name: string, properties: Object = {}): Counter {
     if (!name) {
       throw new Error('Collection.NoMetricName');
     }
@@ -103,7 +110,7 @@ export class Collection {
     return this._metrics[name].COUNTER;
   }
 
-  timer(name: string, properties: Object) {
+  timer(name: string, properties: Object): Timer {
     if (!name) {
       throw new Error('Collection.NoMetricName');
     }
